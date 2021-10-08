@@ -5,6 +5,7 @@ import Footer from '../Components/Footer'
 import styled from 'styled-components'
 import { Add, Remove } from '@material-ui/icons'
 import { mobile } from '../responsive'
+import { useSelector } from 'react-redux'
 
 const Container = styled.div`
     
@@ -148,6 +149,8 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+
+    const cart = useSelector(state=>state.cart)
     return (
         <Container>
             <Navbar />
@@ -165,58 +168,40 @@ const Cart = () => {
                    <Bottom>
 
                        <Info>
-                           <Product>
+                           { cart.products.map(product=> (
+                           (<Product>
                                <ProductDetail>
-                                   <Image src="https://cdn.vox-cdn.com/thumbor/eWifI2wjiyYk3o802Iko69g3DX4=/0x0:2040x1360/1320x0/filters:focal(0x0:2040x1360):format(webp):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/22411713/cfaulkner_20210326_4491_0006.jpg" />
+                                   <Image src={product.img} />
                                    <Details>
-                                        <ProductName><b>Product Name:</b> LG GRAM 17 (2021)</ProductName>
-                                        <ProductId><b>ID:</b> 98216726</ProductId>
-                                        <ProductColor color="black" />
-                                        <ProductSize><b>Variant/Size:</b> 1TB/256GB</ProductSize>
+                                        <ProductName><b>Product Name:</b> {product.name}</ProductName>
+                                        <ProductId><b>ID:</b> {product._id}</ProductId>
+                                        <ProductColor color={product.color} />
+                                        <ProductSize><b>Variant/Size:</b> {product.size}</ProductSize>
                                    </Details>
                                </ProductDetail>
                                <PriceDetail>
                                    <ProductAmountContainer>
                                        <Add />
                                     <ProductAmount>
-                                        2
+                                        {product.quantity}
                                     </ProductAmount>
                                         <Remove />
                                     </ProductAmountContainer>
-                                    <ProductPrice>$ 1699</ProductPrice>
+                                    <ProductPrice>$ {product.price * product.quantity}</ProductPrice>
                                </PriceDetail>
                            </Product>
+                           ) ) )
+                        }
 
                            <Hr />
 
-                           <Product>
-                               <ProductDetail>
-                                   <Image src="https://cdn.idropnews.com/wp-content/uploads/2020/09/16154712/iPad-Air-Giveaway.jpg" />
-                                   <Details>
-                                        <ProductName><b>Product Name:</b> Apple iPad Air</ProductName>
-                                        <ProductId><b>ID:</b> 48293126</ProductId>
-                                        <ProductColor color="grey" />
-                                        <ProductSize><b>Variant/Size:</b> 64GB</ProductSize>
-                                   </Details>
-                               </ProductDetail>
-                               <PriceDetail>
-                                   <ProductAmountContainer>
-                                       <Add />
-                                    <ProductAmount>
-                                        1
-                                    </ProductAmount>
-                                        <Remove />
-                                    </ProductAmountContainer>
-                                    <ProductPrice>$ 599</ProductPrice>
-                               </PriceDetail>
-                           </Product>
 
                        </Info>
                        <Summary>
                            <SummaryTitle>Order Summary</SummaryTitle>
                            <SummaryItem>
                                <SummaryItemText>Subtotal</SummaryItemText>
-                               <SummaryItemPrice>$ 2399</SummaryItemPrice>
+                               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                            </SummaryItem>
                            <SummaryItem>
                                <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -228,7 +213,7 @@ const Cart = () => {
                            </SummaryItem>
                            <SummaryItem type="total">
                                <SummaryItemText >Total</SummaryItemText>
-                               <SummaryItemPrice>$ 2399</SummaryItemPrice>
+                               <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                            </SummaryItem>
                            <Button>Checkout Now</Button>
                        </Summary>
