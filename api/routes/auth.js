@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken')
 
 // Register
 router.post('/register', async (req, res)=> {
+    if (!req.body.username 
+    || !req.body.password 
+    || !req.body.email)
+     res.status(401).json('Invalid credentials!');
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
@@ -25,6 +29,7 @@ router.post('/register', async (req, res)=> {
 
 // Login
 router.post('/login', async (req, res)=> {
+    if (!req.body.username || !req.body.password) res.status(401).json('Invalid credentials!');
     try{
         const user = await User.findOne({username: req.body.username})
         !user && res.status(401).json('Wrong credentials!');
@@ -35,8 +40,7 @@ router.post('/login', async (req, res)=> {
         )
         const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-        originalPassword !== req.body.password &&
-        res.status(401).json('Wrong credentials!');
+        originalPassword !== req.body.password && res.status(401).json('Wrong credentials!');
 
         const accessToken = jwt.sign({
             id: user._id,
