@@ -1,4 +1,9 @@
-import { loginFailure, loginStart, loginSuccess } from "./userRedux";
+import { userFailure, 
+        userStart, 
+        loginSuccess, 
+        userSuccess, 
+        updateUserSuccess, 
+        deleteUserSuccess } from "./userRedux";
 import { publicRequest, userRequest } from "../apiRequest";
 import { deleteProductFailure, deleteProductStart, deleteProductSuccess, 
          getProductFailure, 
@@ -14,13 +19,45 @@ import { deleteProductFailure, deleteProductStart, deleteProductSuccess,
 
 
 export const login = async (dispatch,user) => {
-    dispatch(loginStart());
+    dispatch(userStart());
     try {
         const res = await publicRequest.post('/auth/login',user);
         dispatch(loginSuccess(res.data))
     } catch (error) {
-        dispatch(loginFailure())
+        dispatch(userFailure())
     }
+}
+
+export const userList = async (dispatch) => {
+  dispatch(userStart());
+    try {
+        const res = await userRequest.get('/users/');
+        dispatch(userSuccess(res.data))
+    } catch (error) {
+        dispatch(userFailure())
+    }
+}
+
+export const updateUser = async ({dispatch, newUser, userId}) => {
+  dispatch(userStart());
+  try {
+      const res = await userRequest.put(`/users/${userId}`, newUser);
+      dispatch(updateUserSuccess(res.data))
+      console.log(res.data);
+  } catch (error) {
+      dispatch(userFailure())
+  }
+}
+
+export const deleteUser = async ({dispatch, userId}) => {
+  dispatch(userStart());
+  try {
+      const res = await userRequest.delete(`/users/${userId}`);
+      dispatch(deleteUserSuccess(res.data))
+      console.log(res.data);
+  } catch (error) {
+      dispatch(userFailure())
+  }
 }
 
 export const getProducts = async (dispatch) => {
@@ -52,7 +89,7 @@ export const updateProduct = async (id, product, dispatch) => {
       dispatch(updateProductFailure());
     }
   };
-  export const addProduct = async (product, dispatch) => {
+export const addProduct = async (product, dispatch) => {
     dispatch(addProductStart());
     try {
       const res = await userRequest.post(`/products`, product);
