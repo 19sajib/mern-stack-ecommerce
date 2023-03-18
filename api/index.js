@@ -25,12 +25,12 @@ app.use(express.json())
 
 //Routes
 
-app.use('/api/users', userRoute);
-app.use('/api/auth', authRoute);
-app.use('/api/products', productRoute)
-app.use('/api/carts', cartRoute)
-app.use('/api/orders', orderRoute)
-app.use('/api/checkout', stripeRoute)
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/products', productRoute)
+app.use('/api/v1/carts', cartRoute)
+app.use('/api/v1/orders', orderRoute)
+app.use('/api/v1/checkout', stripeRoute)
 
 
 app.listen(process.env.PORT || 5000, ()=> {
